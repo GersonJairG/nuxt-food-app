@@ -1,6 +1,6 @@
 <template>
   <section class="restaurantinfo">
-    <div v-for="store in fooddata" :key="store.id">
+    <div v-for="store in datasource" :key="store.id">
       <h2>{{ store.name }}</h2>
       <p>
         <span style="font-weight: bold;">Delivery Time:</span>
@@ -20,7 +20,7 @@
           <div class="iteminfo">
             <div>
               <h4>{{ menuitem.item }}</h4>
-              <p>{{ currencyFormat(menuitem.price) }}</p>
+              <p>{{ priceFormatting(menuitem.price) }}</p>
             </div>
             <button class="ghost">View item></button>
           </div>
@@ -32,14 +32,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { currencyFormat } from '@/utils/helpers.js'
 export default {
-  computed: {
-    ...mapState(['fooddata'])
+  props: {
+    datasource: {
+      type: [Array, Object]
+    }
   },
   methods: {
-    currencyFormat
+    priceFormatting(price) {
+      return `$ ${price.toFixed(2)}`
+    }
   }
 }
 </script>
