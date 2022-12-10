@@ -3,9 +3,11 @@
     <h1>
       Nuxt Food App
     </h1>
-    <button>
-      See restaurants here
-    </button>
+    <nuxt-link to="/restaurants">
+      <button>
+        See restaurants here
+      </button>
+    </nuxt-link>
   </section>
 </template>
 
@@ -18,7 +20,7 @@ export default {
 <style lang="scss" scoped>
 .masthead {
   width: 100%;
-  height: 80vh;
+  height: 38vh;
   padding: 40px;
   overflow: hidden;
   background-size: cover !important;
