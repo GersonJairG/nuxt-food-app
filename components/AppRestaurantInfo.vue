@@ -1,7 +1,9 @@
 <template>
   <section class="restaurantinfo">
-    <div v-for="store in datasource" :key="store.id">
-      <h2>{{ store.name }}</h2>
+    <fieldset v-for="store in datasource" :key="store.id">
+      <legend>
+        <h2>{{ store.name }}</h2>
+      </legend>
       <p>
         <span style="font-weight: bold;">Delivery Time:</span>
         {{ store.deliveryTime }} Mins
@@ -23,13 +25,13 @@
               <p>{{ priceFormatting(menuitem.price) }}</p>
             </div>
             <nuxt-link :to="`/products/${menuitem.id}`">
-              <button class="ghost">View item></button>
+              <button class="ghost">View item</button>
             </nuxt-link>
           </div>
         </div>
       </div>
 
-    </div>
+    </fieldset>
   </section>
 </template>
 

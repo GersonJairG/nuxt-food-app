@@ -15,7 +15,8 @@
       <fieldset v-if="currentItem.options">
         <legend>Options</legend>
         <div v-for="option in currentItem.options" :key="option">
-          <input type="radio" name="option" :id="option" :value="option" v-model="itemOptions">
+          <input type="radio" name="option" :id="option" :value="option" v-model="$v.itemOptions.$model"
+            @change="errors = false">
           <label for="option">{{ option }}</label>
         </div>
       </fieldset>
@@ -23,15 +24,20 @@
       <fieldset v-if="currentItem.addOns">
         <legend>Add ons</legend>
         <div v-for="addOn in currentItem.addOns" :key="addOn">
-          <input type="checkbox" name="addOn" :id="addOn" :value="addOn" v-model="itemAddons">
+          <input type="checkbox" name="addOn" :id="addOn" :value="addOn" v-model="$v.itemAddons.$model"
+            @change="errors = false">
           <label for="addOn">{{ addOn }}</label>
         </div>
       </fieldset>
 
-      <AppToast v-if="cartSubmitted">
-        Order submitted <br>
-        Check out more <nuxt-link to="/restaurants">restaurants</nuxt-link>!
+      <AppToast :show="errors" :closeAlert="() => (errors = false)">
+        Please select <span v-if="currentItem.options">options and</span> addons before continuing
       </AppToast>
+
+      <AppToast :show="cartSubmitted" :closeAlert="() => (cartSubmitted = false)" theme="success">
+        Order submitted! Check out more <nuxt-link to="/restaurants">restaurants</nuxt-link>!
+      </AppToast>
+
     </section>
 
     <section class="options">
@@ -44,6 +50,8 @@
 <script>
 import { mapState } from 'vuex'
 import AppToast from '@/components/AppToast'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   components: {
     AppToast
@@ -55,7 +63,16 @@ export default {
       itemOptions: "",
       itemAddons: [],
       itemSizeAndCost: [],
-      cartSubmitted: false
+      cartSubmitted: false,
+      errors: false
+    }
+  },
+  validations: {
+    itemOptions: {
+      required,
+    },
+    itemAddons: {
+      required
     }
   },
   computed: {
@@ -80,6 +97,16 @@ export default {
         addOns: this.itemAddons,
         combinedPrice: this.combinedPrice
       }
+
+      let addOnError = this.$v.itemAddons.$invalid
+      let optionError = this.currentItem.options ? this.$v.itemOptions.$invalid : false
+
+      if (addOnError || optionError) {
+        this.errors = true
+        return
+      }
+
+      this.errors = false
       this.cartSubmitted = true
       this.$store.commit('addToCart', formOutput)
     }

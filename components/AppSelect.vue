@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="select">
     <label :for="select">What {{ select }} do you want?</label>
     <select :name="select" :id="select" @change="$emit('change', $event.target.value)">
       <option value=""> -- Please select a {{ select }}</option>
@@ -25,5 +25,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .select {
+    display: flex;
+    flex-direction: column;
+  }
 </style>
